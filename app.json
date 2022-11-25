@@ -14,7 +14,7 @@
   "environments": {
     "test": {
       "scripts": {
-        "test-setup": "python manage.py collectstatic --noinput",
+        "test-setup": "rembg i images/photo.jpg images/photo.png",
         "test": "python manage.py test"
       }
     }
