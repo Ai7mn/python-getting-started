@@ -1,58 +1,117 @@
-{% extends "base.html" %}
 {% load static %}
+<!DOCTYPE html>
 
-{% block content %}
+<head>
+  <meta charset="utf-8">
+  <title>Backgroud Remover</title>
+  <link href="{% static 'css/main.css'%}" rel="stylesheet" type="text/css" />
+  <style>
+    label[for="id_images"] {
+      display: none;
+    }
 
-<div class="jumbotron text-center">
-  <div class="container">
-    <a href="/" class="lang-logo">
-      <img src="{% static 'lang-logo.png'%}">
-    </a>
-    <h1>Getting Started with Python on Heroku</h1>
-    <p>This is a sample Python application deployed to Heroku. It's a reasonably simple app - but a good foundation for understanding how to get the most out of the Heroku platform.</p>
-    <a type="button" class="btn btn-lg btn-default" href="https://devcenter.heroku.com/articles/getting-started-with-python"><span class="glyphicon glyphicon-flash"></span> Getting Started with Python</a>
-    <a type="button" class="btn btn-lg btn-primary" href="https://github.com/heroku/python-getting-started"><span class="glyphicon glyphicon-download"></span> Source on GitHub</a>
+    #send-imgs {
+      position: absolute;
+      left: 45%;
+      margin-top: 20px;
+    }
+    /* CSS */
+
+    .button-85 {
+      padding: 0.6em 2em;
+      border: none;
+      outline: none;
+      color: rgb(255, 255, 255);
+      background: #111;
+      cursor: pointer;
+      position: relative;
+      z-index: 0;
+      border-radius: 10px;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    .button-85:before {
+      content: "";
+      background: linear-gradient( 45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      background-size: 400%;
+      z-index: -1;
+      filter: blur(5px);
+      -webkit-filter: blur(5px);
+      width: calc(100% + 4px);
+      height: calc(100% + 4px);
+      animation: glowing-button-85 20s linear infinite;
+      transition: opacity 0.3s ease-in-out;
+      border-radius: 10px;
+    }
+
+    @keyframes glowing-button-85 {
+      0% {
+        background-position: 0 0;
+      }
+      50% {
+        background-position: 400% 0;
+      }
+      100% {
+        background-position: 0 0;
+      }
+    }
+
+    .button-85:after {
+      z-index: -1;
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #222;
+      left: 0;
+      top: 0;
+      border-radius: 10px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+<form action="{% url 'home' %}" method="POST" enctype="multipart/form-data" id="my-form">{% csrf_token %} {{form.as_p}}
+
+</form>
+
+<div class="multiple-uploader" id="multiple-uploader">
+  <div class="mup-msg">
+    <span class="mup-main-msg">click to upload images.</span>
+    <span class="mup-msg" id="max-upload-number">Upload up to 10 images</span>
+    <span class="mup-msg">Only images, pdf and psd files are allowed for upload</span>
   </div>
 </div>
-<div class="container">
-  <div class="alert alert-info text-center" role="alert">
-    To deploy your own copy, and learn the fundamentals of the Heroku platform, head over to the <a href="https://devcenter.heroku.com/articles/getting-started-with-python" class="alert-link">Getting Started with Python on Heroku</a> tutorial.
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-info-sign"></span> How this sample app works</h3>
-      <ul>
-        <li>This app was deployed to Heroku, either using Git or by using <a href="https://github.com/heroku/python-getting-started">Heroku Button</a> on the repository.</li>
+<button id="send-imgs" class="button-85" type="submit" form="my-form">Remove BG</button>
+{% if request.session.final_file %}
+<a href="{{request.session.final_file}}" _blank id="download-imgs" class="button-85" >Download Images </a>
+{% endif %}
+<script src="{% static 'js/multiple-uploader.js' %}"></script>
+<script>
+  let multipleUploader = new MultipleUploader('#multiple-uploader').init({
+    maxUpload: 20, // maximum number of uploaded images
+    maxSize: 2, // in size in mb
+    filesInpName: 'imagess', // input name sent to backend
+    formSelector: '#my-form', // form selector
+  });
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-        <li>When Heroku received the source code, it fetched all the dependencies in <a href="https://github.com/heroku/python-getting-started/blob/main/requirements.txt">requirements.txt</a>, creating a deployable slug.</li>
-        <li>The platform then spins up a dyno, a lightweight container that provides an isolated environment in which the slug can be mounted and executed.</li>
-        <li>You can scale your app, manage it, and deploy over <a href="https://addons.heroku.com/">150 add-on services</a>, from the Dashboard or CLI.</li>
-      </ul>
-    </div>
-    <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-link"></span> Next Steps</h3>
-      <ul>
-        <li>If you are following the <a href="https://devcenter.heroku.com/articles/getting-started-with-python">Getting Started</a> guide, then please head back to the tutorial and follow the next steps!</li>
-        <li>If you deployed this app by deploying the Heroku Button, then in a command line shell, run:</li>
-        <ul>
-          <li><code>git clone https://github.com/heroku/python-getting-started.git</code> - this will create a local copy of the source code for the app</li>
-          <li><code>cd python-getting-started</code> - change directory into the local source code repository</li>
-          <li><code>heroku git:remote -a &lt;your-app-name></code> - associate the Heroku app with the repository</li>
-          <li>You'll now be set up to run the app locally, or <a href="https://devcenter.heroku.com/articles/getting-started-with-python#push-local-changes">deploy changes</a> to Heroku</li>
-        </ul>
-      </ul>
-      <h3><span class="glyphicon glyphicon-link"></span> Helpful Links</h3>
-      <ul>
-        <li><a href="https://www.heroku.com/home">Heroku</a></li>
-        <li><a href="https://devcenter.heroku.com/">Heroku Dev Center</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/getting-started-with-python">Getting Started with Python on Heroku</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/django-app-configuration">Configuring Django Apps for Heroku</a></li>
-      </ul>
-    </div>
-  </div> <!-- row -->
-   <div class="alert alert-info text-center" role="alert">
-    Please do work through the Getting Started guide, even if you do know how to build such an application.  The guide covers the basics of working with Heroku, and will familiarize you with all the concepts you need in order to build and deploy your own apps.
-  </div>
-</div>
-{% endblock %}
+<script type="text/javascript">
+  $('#download-imgs').click(function (e) {
+    setTimeout(function () {
+      //alert('Reloading Page');
+      location.reload(true);
+    }, 2500);
+  });
+</script>
+</body>
+
+</html>

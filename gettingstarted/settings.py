@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "hello",
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -121,6 +122,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+FILE_UPLOAD_HANDLERS =[
+    'django.core.files.uploadhandler.MemoryFileUploadHandler',
+    'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+]
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -135,12 +140,17 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-
-STATIC_ROOT = BASE_DIR / "staticfiles"
-STATIC_URL = "static/"
-
-# Enable WhiteNoise's GZip compression of static assets.
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+AWS_ACCESS_KEY_ID = 'DO00Q66GH7Q8KG37XPLM'
+AWS_SECRET_ACCESS_KEY = 'LKqYRwFdsm6JdmMx1R2hOXIGeJyfFTeuC4f4OKPQeaU'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_STORAGE_BUCKET_NAME = 'files'
+DEFAULT_FILE_STORAGE = 'bg_remover.custom_storage.MediaStorage'
+AWS_S3_ENDPOINT_URL = 'https://ai7mn.ams3.digitaloceanspaces.com'
+AWS_S3_REGION_NAME = 'ams3'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = 'public-read'
+STATIC_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_S3_REGION_NAME}/'
 
 
 # Test Runner Config
