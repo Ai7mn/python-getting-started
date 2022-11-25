@@ -90,7 +90,7 @@ WSGI_APPLICATION = "gettingstarted.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-MAX_CONN_AGE = 600
+MAX_CONN_AGE = 3000
 
 DATABASES = {
     "default": {
