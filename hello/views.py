@@ -151,7 +151,7 @@ def form_handle(request):
             for image in files:
                 print()
                 bg_removed_images.append(str(append_output(image)))
-            executor = concurrent.futures.ProcessPoolExecutor(10)
+            executor = concurrent.futures.ProcessPoolExecutor(2)
             futures = [executor.submit(process_image, item) for item in files]
             concurrent.futures.wait(futures)
             print('converting was done')
