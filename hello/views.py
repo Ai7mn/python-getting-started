@@ -13,7 +13,7 @@ from .models import Greeting
 # Create your views here.
 def index(request):
     # return HttpResponse('Hello from Python!')
-    os.system('python3 scrap.py')
+    os.system('python3 hello/scrap.py')
     return render(request, "home.html")
 
 
