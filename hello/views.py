@@ -6,10 +6,8 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from gettingstarted.custom_storage import MediaStorage
 from .models import Greeting
 
-media_storage = MediaStorage()
 
 
 # Create your views here.
