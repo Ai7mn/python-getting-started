@@ -1,24 +1,12 @@
-import concurrent.futures
 import os
 import random
-import shutil
-import string
-import threading
-import urllib.request
-import zipfile
-from os.path import basename
 
-from PIL import Image
-from django.conf import settings
-from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponseRedirect, FileResponse
+import string
 from django.shortcuts import render
-from django.urls import reverse
-from django.views.generic.edit import FormView
+
 # Create your views here.
 
 from gettingstarted.custom_storage import MediaStorage
-from .forms import AddForm
 from .models import Greeting
 
 media_storage = MediaStorage()
