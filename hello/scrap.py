@@ -90,6 +90,7 @@ for x in my_results:
         page = urllib.request.urlopen(the_url)
     except Exception as x:
         print(f"the problem is : {x}")
+        break
     html = page.read().decode("utf-8")
     soup = BeautifulSoup(html, 'html.parser')
     try:
