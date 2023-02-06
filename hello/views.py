@@ -1,13 +1,13 @@
 import os
 import random
-
 import string
-from django.shortcuts import render
 
-# Create your views here.
+from django.shortcuts import render
 
 from .models import Greeting
 
+
+# Create your views here.
 
 
 # Create your views here.

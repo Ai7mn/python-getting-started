@@ -9,7 +9,8 @@ mydb = mysql.connector.connect(host="188.166.2.179",
                                user="aiman",
                                password="Ayman1@1",
                                port="3306",
-                               database="phone_link")
+                               database="phone_link",
+                               auth_plugin='mysql_native_password')
 
 my_cursor = mydb.cursor(buffered=True)
 sql = "SELECT * FROM phone_link where phone_id is NULL ORDER BY id DESC LIMIT 60"
