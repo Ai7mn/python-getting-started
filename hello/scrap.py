@@ -1,6 +1,7 @@
 import mysql.connector
 from bs4 import BeautifulSoup
 import requests
+from random import choice
 import urllib.request
 import sys
 import os
@@ -9,11 +10,10 @@ mydb = mysql.connector.connect(host="188.166.2.179",
                                user="aiman",
                                password="Ayman1@1",
                                port="3306",
-                               database="phone_link",
-                               auth_plugin='mysql_native_password')
+                               database="phone_link")
 
 my_cursor = mydb.cursor(buffered=True)
-sql = "SELECT * FROM phone_link where phone_id is NULL ORDER BY id DESC LIMIT 60"
+sql = "SELECT * FROM phone_link where id > 1870 and  phone_id is NULL ORDER BY id ASC LIMIT 100"
 
 my_cursor.execute(sql)
 
@@ -44,41 +44,20 @@ def insert_phone_specs(phone, spec, title, the_val):
     print("done3")
 
 
-# def take(phone_id, url):
-#     try:
-#         page = urllib.request.urlopen(url)
-#     except Exception as x:
-#         print(f"the problem is : {x}")
-#     soup = BeautifulSoup(page.text, 'html.parser')
-#     try:
-#         phone_name = soup.find('h1').text
-#     except:
-#         phone_name = "Could not find"
-#     print(phone_name)
-#
-#     tables = soup.find_all("table")
-#
-#     for table in tables:
-#         header = [th.text for th in table.find_all('th')]
-#         try:
-#             the_header = str(header[0])
-#         except:
-#             the_header = "None"
-#         for tr in table.find_all('tr'):
-#             data = []
-#             for td in tr.find_all('td'):
-#                 data.append(td.text)
-#             try:
-#                 data1 = str(data[0])
-#             except:
-#                 data1 = "None"
-#             try:
-#                 data2 = str(data[1])
-#             except:
-#                 data2 = "None"
-#         insert_phone_specs(int(new_phone_id), the_header, data1, data2)
-#     print(f"done : {url}")
-#
+user_agents = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246',
+    'Mozilla/5.0 (X11; CrOS x86_64 8172.45.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.64 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9',
+    'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
+    'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1',
+    'Mozilla/5.0 (Linux; Android 5.0.2; LG-V410/V41020c Build/LRX22G) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/34.0.1847.118 Safari/537.36',
+    'Mozilla/5.0 (Windows Phone 10.0; Android 6.0.1; Microsoft; RM-1152) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Mobile Safari/537.36 Edge/15.15254',
+    'Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; Microsoft; RM-1127_16056) AppleWebKit/537.36(KHTML, like Gecko) Chrome/42.0.2311.135 Mobile Safari/537.36 Edge/12.10536',
+    'Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; Microsoft; Lumia 950) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Mobile Safari/537.36 Edge/13.1058',
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
+    'Mozilla/5.0 (iPhone14,3; U; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Mobile/19A346 Safari/602.1',
+]
+
 
 print("start")
 for x in my_results:
@@ -87,7 +66,10 @@ for x in my_results:
     the_url = str(x[2])
     phone_id = int(x[0])
     try:
-        page = urllib.request.urlopen(the_url)
+        version = choice(user_agents)
+        headers = {'User-Agent': version}
+        req = urllib.request.Request(the_url, None, headers)
+        page = urllib.request.urlopen(req)
     except Exception as x:
         print(f"the problem is : {x}")
         break
